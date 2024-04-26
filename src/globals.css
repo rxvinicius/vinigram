@@ -4,6 +4,32 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Change autocomplete styles in Chrome */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  border: 1px solid unset;
+  -webkit-text-fill-color: white;
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  box-shadow: 0 0 0px 1000px unset inset;
+  transition: background-color 5000s ease-in-out 0s;
+  color: white;
+}
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 1px solid unset;
+  -webkit-text-fill-color: white;
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  box-shadow: 0 0 0px 1000px unset inset;
+  transition: background-color 5000s ease-in-out 0s;
+  color: white;
+}
+
 @layer base {
   * {
     @apply box-border list-none p-0 m-0 scroll-smooth;
