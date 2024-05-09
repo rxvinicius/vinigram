@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
@@ -25,12 +26,11 @@ import { useUserContext } from '@/context/AuthContext';
 
 const SignupForm = () => {
   const { toast } = useToast();
-  const navigate = useNavigate();
   const { checkAuthUser } = useUserContext();
-
-  const { mutateAsync: createNewUserAccount, isPending: isCreatingUser } =
-    useCreateUserAccount();
+  const { mutateAsync: createNewUserAccount } = useCreateUserAccount();
   const { mutateAsync: signInAccount } = useSignInAccount();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
@@ -42,11 +42,23 @@ const SignupForm = () => {
     },
   });
 
+  const signUpFailed = (description: string = 'Sign up failed') => {
+    setIsLoading(false);
+    toast({
+      title: 'Uh oh! Something went wrong',
+      description: `${description}. Please try again later.`,
+      variant: 'destructive',
+      className: 'bg-red',
+      duration: 2000,
+    });
+  };
+
   async function onSubmit(values: z.infer<typeof SignupValidation>) {
+    setIsLoading(true);
     const newUser = await createNewUserAccount(values);
 
     if (!newUser) {
-      return toast({ title: 'Sign up failed. Please try again.' });
+      return signUpFailed();
     }
 
     const session = await signInAccount({
@@ -55,13 +67,13 @@ const SignupForm = () => {
     });
 
     if (!session) {
-      return toast({ title: 'Sign in failed. Please try again.' });
+      return signUpFailed('Sign in failed');
     }
 
     const isLoggedIn = await checkAuthUser();
 
     if (!isLoggedIn) {
-      return toast({ title: 'Sign up failed. Please try again.' });
+      return signUpFailed();
     }
 
     form.reset();
@@ -138,9 +150,9 @@ const SignupForm = () => {
           <Button
             type="submit"
             className="shad-button_primary"
-            disabled={isCreatingUser}
+            disabled={isLoading}
           >
-            {isCreatingUser ? (
+            {isLoading ? (
               <div className="flex-center gap-2">
                 <Loader />
               </div>
