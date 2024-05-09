@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
@@ -22,9 +23,9 @@ import { useUserContext } from '@/context/AuthContext';
 const SigninForm = () => {
   const { toast } = useToast();
   const { checkAuthUser } = useUserContext();
+  const { mutateAsync: signInAccount } = useSignInAccount();
   const navigate = useNavigate();
-
-  const { mutateAsync: signInAccount, isPending } = useSignInAccount();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof SigninValidation>>({
     resolver: zodResolver(SigninValidation),
@@ -34,20 +35,32 @@ const SigninForm = () => {
     },
   });
 
+  const signInFailed = () => {
+    setIsLoading(false);
+    toast({
+      title: 'Uh oh! Something went wrong',
+      description: 'Sign in failed. Please try again later.',
+      variant: 'destructive',
+      className: 'bg-red',
+      duration: 2000,
+    });
+  };
+
   async function onSubmit(values: z.infer<typeof SigninValidation>) {
+    setIsLoading(true);
     const session = await signInAccount({
       email: values.email,
       password: values.password,
     });
 
     if (!session) {
-      return toast({ title: 'Sign in failed. Please try again.' });
+      return signInFailed();
     }
 
     const isLoggedIn = await checkAuthUser();
 
     if (!isLoggedIn) {
-      return toast({ title: 'Sign in failed. Please try again.' });
+      return signInFailed();
     }
 
     form.reset();
@@ -98,9 +111,9 @@ const SigninForm = () => {
           <Button
             type="submit"
             className="shad-button_primary"
-            disabled={isPending}
+            disabled={isLoading}
           >
-            {isPending ? (
+            {isLoading ? (
               <div className="flex-center gap-2">
                 <Loader />
               </div>
