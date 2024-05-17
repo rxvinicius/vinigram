@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { PostValidation } from '@/lib/validation';
-import { useCreatePost } from '@/lib/react-query/queriesAndMutarions';
+import { useCreatePost } from '@/lib/react-query/queries/postQueries';
 import { Textarea } from '../ui/textarea';
 import { Input } from '../ui/input';
 import { useToast } from '../ui/use-toast';

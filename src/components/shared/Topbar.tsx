@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { useSignOutAccount } from '@/lib/react-query/queriesAndMutarions';
+import { useSignOutAccount } from '@/lib/react-query/queries/userQueries';
 import { useUserContext } from '@/context/AuthContext';
 import { Button } from '../ui/button';
 import HomeLink from './HomeLink';

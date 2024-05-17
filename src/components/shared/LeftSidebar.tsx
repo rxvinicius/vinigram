@@ -4,7 +4,7 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { SIDEBAR_LINKS } from '@/constants';
 import { INavLink } from '@/types';
 import { useUserContext } from '@/context/AuthContext';
-import { useSignOutAccount } from '@/lib/react-query/queriesAndMutarions';
+import { useSignOutAccount } from '@/lib/react-query/queries/userQueries';
 import { Button } from '../ui/button';
 import HomeLink from './HomeLink';
 

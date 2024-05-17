@@ -21,7 +21,7 @@ import { SignupValidation } from '@/lib/validation';
 import {
   useCreateUserAccount,
   useSignInAccount,
-} from '@/lib/react-query/queriesAndMutarions';
+} from '@/lib/react-query/queries/userQueries';
 import { useUserContext } from '@/context/AuthContext';
 
 const SignupForm = () => {
