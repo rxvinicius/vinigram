@@ -1,11 +1,13 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { INewUser } from '@/types';
 import {
   createUserAccount,
+  getCurrentUser,
   signInAccount,
   signOutAccount,
 } from '../../appwrite/api/users';
+import { QUERY_KEYS } from '../queryKeys';
 
 export const useCreateUserAccount = () =>
   useMutation({
@@ -20,3 +22,9 @@ export const useSignInAccount = () =>
 
 export const useSignOutAccount = () =>
   useMutation({ mutationFn: signOutAccount });
+
+export const useGetCurrentUser = () =>
+  useQuery({
+    queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+    queryFn: getCurrentUser,
+  });
