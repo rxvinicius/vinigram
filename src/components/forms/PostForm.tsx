@@ -15,7 +15,10 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { PostValidation } from '@/lib/validation';
-import { useCreatePost } from '@/lib/react-query/queries/postQueries';
+import {
+  useCreatePost,
+  useUpdatePost,
+} from '@/lib/react-query/queries/postQueries';
 import { Textarea } from '../ui/textarea';
 import { Input } from '../ui/input';
 import { useToast } from '../ui/use-toast';
@@ -24,14 +27,17 @@ import { useUserContext } from '@/context/AuthContext';
 
 type PostFormProps = {
   post?: Models.Document;
+  action: 'Create' | 'Update';
 };
 
-const PostForm = ({ post }: PostFormProps) => {
+const PostForm = ({ post, action }: PostFormProps) => {
+  const navigate = useNavigate();
   const { user } = useUserContext();
   const { mutateAsync: createPost } = useCreatePost();
-  const navigate = useNavigate();
+  const { mutateAsync: updatePost } = useUpdatePost();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const isPostCreated = post?.$id;
 
   const form = useForm<z.infer<typeof PostValidation>>({
     resolver: zodResolver(PostValidation),
@@ -47,7 +53,7 @@ const PostForm = ({ post }: PostFormProps) => {
     setIsLoading(false);
     toast({
       title: 'Uh oh! Something went wrong',
-      description: 'Create post failed. Please try again later.',
+      description: `${action} post failed. Please try again later.`,
       variant: 'destructive',
       className: 'bg-red',
       duration: 2000,
@@ -57,12 +63,21 @@ const PostForm = ({ post }: PostFormProps) => {
   async function onSubmit(values: z.infer<typeof PostValidation>) {
     setIsLoading(true);
 
-    const newPost = await createPost({ ...values, userId: user.id });
-
-    if (!newPost) {
-      return error();
+    /* UPDATE */
+    if (isPostCreated && action === 'Update') {
+      const updatedPost = await updatePost({
+        ...values,
+        postId: post.$id,
+        imageId: post?.imageId,
+        imageUrl: post?.imageUrl,
+      });
+      if (!updatedPost) return error();
+      return navigate(`/post/${post.$id}`);
     }
 
+    /* INSERT */
+    const newPost = await createPost({ ...values, userId: user.id });
+    if (!newPost) return error();
     navigate('/');
   }
 
@@ -149,6 +164,7 @@ const PostForm = ({ post }: PostFormProps) => {
           >
             Cancel
           </Button>
+
           <Button
             type="submit"
             className="shad-button_primary min-w-20 min-h-12 whitespace-nowrap"
@@ -159,7 +175,7 @@ const PostForm = ({ post }: PostFormProps) => {
                 <Loader />
               </div>
             ) : (
-              'Submit'
+              `${action} Post`
             )}
           </Button>
         </div>
