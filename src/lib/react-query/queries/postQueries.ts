@@ -2,15 +2,18 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import {
   createPost,
+  deletePost,
   deleteSavedPost,
+  getPostById,
   getRecentPosts,
   likePost,
   savePost,
+  updatePost,
 } from '../../appwrite/api/posts';
 import { QUERY_KEYS } from '../queryKeys';
-import { INewPost } from '@/types';
+import { INewPost, IUpdatePost } from '@/types';
 
-export const useCreatePost = () => {
+const useCreatePost = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -23,13 +26,51 @@ export const useCreatePost = () => {
   });
 };
 
-export const useGetRecentPosts = () =>
+const useUpdatePost = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (post: IUpdatePost) => updatePost(post),
+    onSuccess(data) {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
+      });
+    },
+  });
+};
+
+const useDeletePost = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ postId, imageId }: { postId: string; imageId: string }) =>
+      deletePost(postId, imageId),
+    onSuccess() {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+      });
+      // TODO: try to invalidate the post if the user is on post details screen
+      /* queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POST_BY_ID, postId],
+      }); */
+    },
+  });
+};
+
+const useGetRecentPosts = () =>
   useQuery({
     queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
     queryFn: getRecentPosts,
   });
 
-export const useLikePost = () => {
+const useGetPostById = (postId: string) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.GET_POST_BY_ID, postId],
+    queryFn: () => getPostById(postId),
+    enabled: !!postId,
+  });
+
+const useLikePost = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -57,7 +98,7 @@ export const useLikePost = () => {
   });
 };
 
-export const useSavePost = () => {
+const useSavePost = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -77,7 +118,7 @@ export const useSavePost = () => {
   });
 };
 
-export const useDeleteSavedPost = () => {
+const useDeleteSavedPost = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -94,4 +135,15 @@ export const useDeleteSavedPost = () => {
       });
     },
   });
+};
+
+export {
+  useCreatePost,
+  useUpdatePost,
+  useDeletePost,
+  useGetRecentPosts,
+  useGetPostById,
+  useLikePost,
+  useSavePost,
+  useDeleteSavedPost,
 };
