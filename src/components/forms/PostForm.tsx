@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { Models } from 'appwrite';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -19,18 +18,14 @@ import {
   useCreatePost,
   useUpdatePost,
 } from '@/lib/react-query/queries/postQueries';
+import { useUserContext } from '@/context/AuthContext';
+import { IPostForm } from '@/types';
 import { Textarea } from '../ui/textarea';
 import { Input } from '../ui/input';
 import { useToast } from '../ui/use-toast';
 import { FileUploader, Loader } from '../shared';
-import { useUserContext } from '@/context/AuthContext';
 
-type PostFormProps = {
-  post?: Models.Document;
-  action: 'Create' | 'Update';
-};
-
-const PostForm = ({ post, action }: PostFormProps) => {
+const PostForm = ({ post, action }: IPostForm) => {
   const navigate = useNavigate();
   const { user } = useUserContext();
   const { mutateAsync: createPost } = useCreatePost();
