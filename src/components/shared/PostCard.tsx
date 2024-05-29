@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { formatDate } from '@/lib/utils';
 import { useUserContext } from '@/context/AuthContext';
 import PostStats from './PostStats';
+import PostInfo from './PostInfo';
 
 type PostCardProps = {
   post: Models.Document;
@@ -59,14 +60,7 @@ const PostCard = ({ post }: PostCardProps) => {
 
       <Link to={`/post/${post.$id}`}>
         <div className="small-medium lg:base-medium py-5">
-          <p>{post.caption}</p>
-          <ul className="flex gap-1 mt-2">
-            {post.tags.map((tag: string) => (
-              <li key={tag} className="text-light-3">
-                #{tag}
-              </li>
-            ))}
-          </ul>
+          <PostInfo post={post} />
         </div>
 
         <div className="w-full h-64 xs:h-[400px] lg:h-[450px] overflow-hidden relative rounded-[24px] mb-5">
