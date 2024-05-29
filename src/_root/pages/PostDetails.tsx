@@ -41,7 +41,7 @@ const PostDetails = () => {
                       '/assets/icons/profile-placeholder.svg'
                     }
                     alt="post creator"
-                    className="rounded-full w-8 h-8 lg:w-10 lg:h-10"
+                    className="rounded-full w-8 h-8 lg:w-9 lg:h-9"
                   />
                 </Link>
 
@@ -49,7 +49,7 @@ const PostDetails = () => {
                   {/* Post creator name */}
                   <Link
                     to={`/profile/${postCreator.$id}`}
-                    className="base-medium lg:body-bold text-light-1"
+                    className="base-medium text-light-1"
                   >
                     {postCreator.name}
                   </Link>
@@ -91,7 +91,7 @@ const PostDetails = () => {
             <hr className="w-full border border-dark-4/80" />
 
             <div
-              className={`flex flex-col flex-1 w-full small-medium lg:base-regular ${defaultP} pt-0`}
+              className={`flex flex-col flex-1 w-full small-medium ${defaultP} pt-0`}
             >
               <PostInfo post={post} />
             </div>
