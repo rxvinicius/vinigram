@@ -1,3 +1,5 @@
+import { Models } from 'appwrite';
+
 /* User */
 export type IUser = {
   id: string;
@@ -41,6 +43,11 @@ export type IUpdatePost = {
   file: File[];
   location?: string;
   tags?: string;
+};
+
+export type IPostForm = {
+  post?: Models.Document;
+  action: 'Create' | 'Update';
 };
 
 /* Others */
