@@ -43,7 +43,7 @@ const LeftSidebar = () => {
   return (
     <nav className="leftsidebar">
       <div className="flex flex-col gap-9">
-        <HomeLink imageWidth={170} imageHeight={36} />
+        <HomeLink imageWidth={160} imageHeight={30} />
 
         <Link to={`/profile/${user.id}`} className="flex items-center gap-3">
           <img

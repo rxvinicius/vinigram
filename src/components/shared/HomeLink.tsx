@@ -5,7 +5,7 @@ type IHomeLink = {
   imageHeight?: number;
 };
 
-const HomeLink = ({ imageWidth = 130, imageHeight = 325 }: IHomeLink) => (
+const HomeLink = ({ imageWidth = 1030, imageHeight = 3250 }: IHomeLink) => (
   <Link to="/" className="flex gap-3 items-center">
     <img
       src="/assets/images/logo.svg"

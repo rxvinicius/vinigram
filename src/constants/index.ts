@@ -1,4 +1,4 @@
-export const PROJECT_NAME = 'Vinigram';
+export const PROJECT_NAME = import.meta.env.VITE_PROJECT_NAME;
 
 export const SIDEBAR_LINKS = [
   {
