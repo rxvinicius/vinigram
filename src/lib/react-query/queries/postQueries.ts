@@ -1,13 +1,20 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import {
   createPost,
   deletePost,
   deleteSavedPost,
+  getInfinitePosts,
   getPostById,
   getRecentPosts,
   likePost,
   savePost,
+  searchPosts,
   updatePost,
 } from '../../appwrite/api/posts';
 import { QUERY_KEYS } from '../queryKeys';
@@ -137,6 +144,30 @@ const useDeleteSavedPost = () => {
   });
 };
 
+const useGetPosts = () =>
+  useInfiniteQuery({
+    queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
+    queryFn: getInfinitePosts,
+    initialPageParam: undefined,
+    getNextPageParam: (lastPage) => {
+      // If there's no data, there are no more pages.
+      if (lastPage && lastPage.documents.length === 0) {
+        return null;
+      }
+
+      // Use the $id of the last document as the cursor.
+      const lastId = lastPage?.documents[lastPage.documents.length - 1].$id;
+      return lastId;
+    },
+  });
+
+const useSearchPosts = (searchTerm: string) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.SEARCH_POSTS],
+    queryFn: () => searchPosts(searchTerm),
+    enabled: !!searchTerm,
+  });
+
 export {
   useCreatePost,
   useUpdatePost,
@@ -146,4 +177,6 @@ export {
   useLikePost,
   useSavePost,
   useDeleteSavedPost,
+  useGetPosts,
+  useSearchPosts,
 };
