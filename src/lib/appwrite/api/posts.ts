@@ -254,6 +254,47 @@ async function deleteSavedPost(savedRecordId: string) {
   }
 }
 
+async function getInfinitePosts({ pageParam }: { pageParam?: string }) {
+  const queries: any[] = [Query.orderDesc('$updatedAt'), Query.limit(9)];
+
+  if (pageParam) {
+    queries.push(Query.cursorAfter(pageParam.toString()));
+  }
+
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      queries
+    );
+
+    if (!posts) throw Error;
+
+    return posts;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+async function searchPosts(searchTerm: string) {
+  if (!searchTerm || searchTerm.trim() === '') throw Error;
+
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      [Query.search('caption', searchTerm.trim())]
+    );
+
+    if (!posts) throw Error;
+
+    return posts;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export {
   createPost,
   updatePost,
@@ -263,4 +304,6 @@ export {
   likePost,
   savePost,
   deleteSavedPost,
+  getInfinitePosts,
+  searchPosts,
 };
