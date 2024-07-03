@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 
 import { Input } from '@/components/ui/input';
 import { GridPostList, Loader, SearchResults } from '@/components/shared';
@@ -7,7 +8,6 @@ import {
   useSearchPosts,
 } from '@/lib/react-query/queries/postQueries';
 import useDebounce from '@/hooks/useDebounce';
-import { useInView } from 'react-intersection-observer';
 
 const Explore = () => {
   const { ref, inView } = useInView();
