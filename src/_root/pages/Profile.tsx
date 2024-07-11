@@ -35,11 +35,7 @@ const Profile = () => {
   const { pathname } = useLocation();
 
   if (!currentUser) {
-    return (
-      <div className="flex-center w-full h-full">
-        <Loader />
-      </div>
-    );
+    return <Loader />;
   }
 
   const isUserAccessingOwnProfile = currentUser.$id === user.id;
