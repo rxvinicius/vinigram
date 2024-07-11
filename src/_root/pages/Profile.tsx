@@ -143,7 +143,13 @@ const Profile = () => {
       <Routes>
         <Route
           index
-          element={<GridPostList posts={currentUser.posts} showUser={false} />}
+          element={
+            currentUser.posts.length > 0 ? (
+              <GridPostList posts={currentUser.posts} showUser={false} />
+            ) : (
+              <p className="text-light-4">You haven't created any posts yet</p>
+            )
+          }
         />
         {isUserAccessingOwnProfile && (
           <Route path="/liked-posts" element={<LikedPosts />} />

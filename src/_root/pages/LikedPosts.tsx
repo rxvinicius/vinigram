@@ -10,15 +10,11 @@ const LikedPosts = () => {
 
   const likedPosts = currentUser.liked;
 
-  return (
-    <>
-      {likedPosts.length === 0 && (
-        <p className="text-light-4">No liked posts</p>
-      )}
+  if (likedPosts.length === 0) {
+    return <p className="text-light-4">No liked posts</p>;
+  }
 
-      <GridPostList posts={likedPosts} showStats={false} />
-    </>
-  );
+  return <GridPostList posts={likedPosts} showStats={false} />;
 };
 
 export default LikedPosts;
