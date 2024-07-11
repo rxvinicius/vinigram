@@ -40,6 +40,14 @@ const Profile = () => {
 
   const isUserAccessingOwnProfile = currentUser.$id === user.id;
 
+  const noPostsMessage = () => {
+    return `${
+      isUserAccessingOwnProfile
+        ? "You haven't"
+        : `${currentUser.name.split(' ')[0]} hasn't`
+    } created any posts yet`;
+  };
+
   return (
     <div className="profile-container">
       <div className="profile-inner_container">
@@ -147,7 +155,7 @@ const Profile = () => {
             currentUser.posts.length > 0 ? (
               <GridPostList posts={currentUser.posts} showUser={false} />
             ) : (
-              <p className="text-light-4">You haven't created any posts yet</p>
+              <p className="text-light-4">{noPostsMessage()}</p>
             )
           }
         />
