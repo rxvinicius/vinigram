@@ -4,6 +4,7 @@ import { INewUser } from '@/types';
 import {
   createUserAccount,
   getCurrentUser,
+  getUsers,
   signInAccount,
   signOutAccount,
 } from '../../appwrite/api/users';
@@ -27,4 +28,10 @@ export const useGetCurrentUser = () =>
   useQuery({
     queryKey: [QUERY_KEYS.GET_CURRENT_USER],
     queryFn: getCurrentUser,
+  });
+
+export const useGetUsers = (limit?: number) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.GET_USERS],
+    queryFn: () => getUsers(limit),
   });
