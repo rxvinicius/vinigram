@@ -10,3 +10,4 @@ export { default as PostInfo } from './PostInfo';
 export { default as PostStats } from './PostStats';
 export { default as SearchResults } from './SearchResults';
 export { default as Topbar } from './Topbar';
+export { default as UserCard } from './UserCard';
