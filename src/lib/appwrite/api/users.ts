@@ -116,10 +116,27 @@ async function getUsers(limit?: number) {
   }
 }
 
+async function getUserById(userId: string) {
+  try {
+    const user = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      userId
+    );
+
+    if (!user) throw Error;
+
+    return user;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export {
   createUserAccount,
   signInAccount,
   signOutAccount,
   getCurrentUser,
   getUsers,
+  getUserById,
 };
