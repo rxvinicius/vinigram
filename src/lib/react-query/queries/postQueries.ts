@@ -12,6 +12,7 @@ import {
   getInfinitePosts,
   getPostById,
   getRecentPosts,
+  getSavedPosts,
   likePost,
   savePost,
   searchPosts,
@@ -168,6 +169,12 @@ const useSearchPosts = (searchTerm: string) =>
     enabled: !!searchTerm,
   });
 
+const useGetSavedPosts = (userId: string) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+    queryFn: () => getSavedPosts(userId),
+  });
+
 export {
   useCreatePost,
   useUpdatePost,
@@ -179,4 +186,5 @@ export {
   useDeleteSavedPost,
   useGetPosts,
   useSearchPosts,
+  useGetSavedPosts,
 };
