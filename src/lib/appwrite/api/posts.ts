@@ -295,6 +295,28 @@ async function searchPosts(searchTerm: string) {
   }
 }
 
+async function getSavedPosts(userId: string) {
+  const queries: any[] = [
+    Query.equal('user', userId),
+    Query.orderDesc('$createdAt'),
+  ];
+
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.savesCollectionId,
+      queries
+    );
+
+    if (!posts) throw Error;
+
+    return posts;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
 export {
   createPost,
   updatePost,
@@ -306,4 +328,5 @@ export {
   deleteSavedPost,
   getInfinitePosts,
   searchPosts,
+  getSavedPosts,
 };

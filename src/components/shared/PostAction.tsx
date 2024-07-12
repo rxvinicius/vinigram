@@ -8,10 +8,10 @@ const PostAction = ({ post, action }: IPostForm) => (
         <img
           src="/assets/icons/add-post.svg"
           alt="add"
-          width={36}
-          height={36}
+          width={32}
+          height={32}
         />
-        <h2 className="h3-bold md:h2-bold text-left w-full">{action} Post</h2>
+        <h2 className="page-title">{action} Post</h2>
       </div>
 
       <PostForm post={post} action={action} />
