@@ -99,6 +99,14 @@ select:-webkit-autofill:focus {
   }
 
   /* UTILITIES */
+  .page-title {
+    @apply h3-bold md:h2-bold text-left w-full;
+  }
+
+  .form-title {
+    @apply h3-bold md:h2-bold pt-5;
+  }
+
   .invert-white {
     @apply invert brightness-0 transition;
   }
