@@ -13,7 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { PostValidation } from '@/lib/validation';
+import { PostValidation } from '@/lib/validations/post';
 import {
   useCreatePost,
   useUpdatePost,

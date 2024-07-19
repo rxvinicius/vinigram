@@ -1,6 +1,7 @@
-import { ID, ImageGravity, Query } from 'appwrite';
+import { ID, Query } from 'appwrite';
 
-import { appwriteConfig, databases, storage } from '../config';
+import { appwriteConfig, databases } from '../config';
+import { deleteFile, getFilePreview, uploadFile } from './files';
 import { INewPost, IUpdatePost } from '@/types';
 
 async function createPost(post: INewPost) {
@@ -48,13 +49,12 @@ async function createPost(post: INewPost) {
 
 async function updatePost(post: IUpdatePost) {
   const hasFileToUpdate = post.file.length > 0;
+  let image = {
+    imageUrl: post.imageUrl,
+    imageId: post.imageId,
+  };
 
   try {
-    let image = {
-      imageUrl: post.imageUrl,
-      imageId: post.imageId,
-    };
-
     if (hasFileToUpdate) {
       // Upload file to appwrite storage
       const uploadedFile = await uploadFile(post.file[0]);
@@ -121,48 +121,6 @@ async function deletePost(postId: string, imageId: string) {
     console.log('teste ->', teste);
 
     return deletedPost;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-async function uploadFile(file: File) {
-  try {
-    const uploadedFile = await storage.createFile(
-      appwriteConfig.storageId,
-      ID.unique(),
-      file
-    );
-
-    return uploadedFile;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-function getFilePreview(fileId: string) {
-  try {
-    const fileUrl = storage.getFilePreview(
-      appwriteConfig.storageId,
-      fileId,
-      2000,
-      2000,
-      ImageGravity.Top,
-      100
-    );
-
-    if (!fileUrl) throw Error;
-
-    return fileUrl;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-async function deleteFile(fileId: string) {
-  try {
-    const result = await storage.deleteFile(appwriteConfig.storageId, fileId);
-    return result;
   } catch (error) {
     console.log(error);
   }
