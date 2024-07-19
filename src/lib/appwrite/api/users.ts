@@ -1,7 +1,8 @@
 import { ID, Query } from 'appwrite';
 
 import { account, appwriteConfig, avatars, databases } from '../config';
-import { INewUser } from '@/types';
+import { deleteFile, getFilePreview, uploadFile } from './files';
+import { INewUser, IUpdateUser } from '@/types';
 
 async function createUserAccount(user: INewUser) {
   try {
@@ -132,6 +133,60 @@ async function getUserById(userId: string) {
   }
 }
 
+async function updateUser(user: IUpdateUser) {
+  const hasFileToUpdate = user.file.length > 0;
+  let image = {
+    imageUrl: user.imageUrl,
+    imageId: user.imageId,
+  };
+
+  try {
+    if (hasFileToUpdate) {
+      // Upload new file to appwrite storage
+      const uploadedFile = await uploadFile(user.file[0]);
+      if (!uploadedFile) throw Error;
+
+      const fileUrl = getFilePreview(uploadedFile.$id);
+      if (!fileUrl) {
+        await deleteFile(uploadedFile.$id);
+        throw Error;
+      }
+
+      image = { imageUrl: fileUrl, imageId: uploadedFile.$id };
+    }
+
+    // Update the user
+    const updatedUser = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      user.userId,
+      {
+        name: user.name,
+        bio: user.bio,
+        imageUrl: image.imageUrl,
+        imageId: image.imageId,
+      }
+    );
+
+    if (!updatedUser) {
+      if (hasFileToUpdate) {
+        await deleteFile(image.imageId);
+      }
+      throw Error;
+    }
+
+    // Safely delete old file after successful update
+    if (user.imageId && hasFileToUpdate) {
+      await deleteFile(user.imageId);
+    }
+
+    return updatedUser;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
 export {
   createUserAccount,
   signInAccount,
@@ -139,4 +194,5 @@ export {
   getCurrentUser,
   getUsers,
   getUserById,
+  updateUser,
 };
