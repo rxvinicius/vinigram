@@ -51,8 +51,8 @@ const UpdateProfile = () => {
 
     const updatedUser = await updateUser({
       userId: currentUser.$id,
-      name: value.name,
-      bio: value.bio,
+      name: value.name.trim(),
+      bio: value.bio && value.bio.trim(),
       file: value.file,
       imageUrl: currentUser.imageUrl,
       imageId: currentUser.imageId,
@@ -65,16 +65,23 @@ const UpdateProfile = () => {
         description: `Update user failed. Please try again later.`,
         variant: 'destructive',
         className: 'bg-red',
-        duration: 2000,
+        duration: 2500,
       });
     }
 
+    toast({
+      title: 'Updated user successfully!',
+      variant: 'destructive',
+      className: 'bg-green',
+      duration: 2500,
+    });
     setUser({
       ...user,
       name: updatedUser?.name,
       bio: updatedUser?.bio,
       imageUrl: updatedUser?.imageUrl,
     });
+
     return navigate(`/profile/${id}`);
   }
 
