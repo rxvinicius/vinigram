@@ -1,7 +1,7 @@
 import { useUserContext } from '@/context/AuthContext';
 import { useGetSavedPosts } from '@/lib/react-query/queries/postQueries';
 
-import { GridPostList, Loader } from '@/components/shared';
+import { GridPostList, Loader, PageHeader } from '@/components/shared';
 
 const Saved = () => {
   const { user } = useUserContext();
@@ -15,17 +15,7 @@ const Saved = () => {
 
   return (
     <div className="saved-container">
-      {/* Header */}
-      <div className="flex-start gap-3 justify-start w-full max-w-5xl">
-        <img
-          src="/assets/icons/save.svg"
-          width={32}
-          height={32}
-          alt="Saved posts"
-          className="invert-white"
-        />
-        <h2 className="page-title">Saved Posts</h2>
-      </div>
+      <PageHeader title="Saved Posts" />
 
       {/* Grid post list */}
       {posts.length === 0 ? (

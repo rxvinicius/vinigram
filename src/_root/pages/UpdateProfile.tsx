@@ -10,7 +10,7 @@ import {
   useUpdateUser,
 } from '@/lib/react-query/queries/userQueries';
 import { ProfileValidation } from '@/lib/validations/user';
-import { Loader, ProfileUploader } from '@/components/shared';
+import { Loader, PageHeader, ProfileUploader } from '@/components/shared';
 import {
   Form,
   FormControl,
@@ -98,16 +98,11 @@ const UpdateProfile = () => {
   return (
     <div className="flex flex-1">
       <div className="common-container">
-        <div className="flex-start gap-3 justify-start w-full max-w-5xl">
-          <img
-            src="/assets/icons/edit.svg"
-            width={32}
-            height={32}
-            alt="Edit profile"
-            className="invert-white"
-          />
-          <h2 className="page-title">Edit Profile</h2>
-        </div>
+        <PageHeader
+          title="Edit Profile"
+          imageSrc="/assets/icons/edit.svg"
+          imageAlt="Edit profile"
+        />
 
         <Form {...form}>
           <form

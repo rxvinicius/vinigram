@@ -2,7 +2,12 @@ import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { Input } from '@/components/ui/input';
-import { GridPostList, Loader, SearchResults } from '@/components/shared';
+import {
+  GridPostList,
+  Loader,
+  PageHeader,
+  SearchResults,
+} from '@/components/shared';
 import {
   useGetPosts,
   useSearchPosts,
@@ -16,18 +21,8 @@ const Explore = () => {
   const debouncedValue = useDebounce(searchValue, 500);
   const { data: searchedPosts, isFetching } = useSearchPosts(debouncedValue);
 
-  useEffect(() => {
-    if (inView && !searchValue) {
-      fetchNextPage();
-    }
-  }, [inView, searchValue]);
-
   if (!posts) {
-    return (
-      <div className="flex-center w-full h-full">
-        <Loader />
-      </div>
-    );
+    return <Loader />;
   }
 
   const showSearchResults = searchValue !== '';
@@ -35,10 +30,16 @@ const Explore = () => {
     !showSearchResults &&
     posts.pages.every((item: any) => item.documents.length === 0);
 
+  useEffect(() => {
+    if (inView && !searchValue) {
+      fetchNextPage();
+    }
+  }, [inView, searchValue]);
+
   return (
     <div className="explore-container">
       <div className="explore-inner_container">
-        <h2 className="page-title">Search Posts</h2>
+        <PageHeader title="Search Posts" />
 
         <div className="flex gap-1 px-4 w-full rounded-lg bg-dark-4">
           <img

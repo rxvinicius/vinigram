@@ -1,5 +1,5 @@
 import { useGetUsers } from '@/lib/react-query/queries/userQueries';
-import { Loader, UserCard } from '@/components/shared';
+import { Loader, PageHeader, UserCard } from '@/components/shared';
 import { useToast } from '@/components/ui/use-toast';
 
 const AllUsers = () => {
@@ -21,7 +21,7 @@ const AllUsers = () => {
   return (
     <div className="common-container">
       <div className="user-container">
-        <h2 className="page-title">All Users</h2>
+        <PageHeader title="All Users" />
 
         {isLoading && !creators ? (
           <Loader />

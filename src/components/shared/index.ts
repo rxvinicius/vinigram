@@ -4,6 +4,7 @@ export { default as HomeLink } from './HomeLink';
 export { default as GridPostList } from './GridPostList';
 export { default as LeftSidebar } from './LeftSidebar';
 export { default as Loader } from './Loader';
+export { default as PageHeader } from './PageHeader';
 export { default as PostAction } from './PostAction';
 export { default as PostCard } from './PostCard';
 export { default as PostInfo } from './PostInfo';

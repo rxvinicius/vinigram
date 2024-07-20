@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Models } from 'appwrite';
 
-import { Loader, PostCard } from '@/components/shared';
+import { Loader, PageHeader, PostCard } from '@/components/shared';
 import { useGetPosts } from '@/lib/react-query/queries/postQueries';
 
 type Page = {
@@ -24,7 +24,7 @@ const Home = () => {
     <div className="flex flex-1">
       <div className="home-container">
         <div className="home-posts">
-          <h2 className="page-title">Home Feed</h2>
+          <PageHeader title="Home Feed" />
           {isPending && !posts ? (
             <Loader />
           ) : (
