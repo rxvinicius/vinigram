@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -26,33 +26,27 @@ import { Button } from '@/components/ui/button';
 
 const UpdateProfile = () => {
   const { id } = useParams();
-
-  if (!id) return;
-
-  const { data: currentUser } = useGetUserById(id);
-
-  if (!currentUser) {
-    return <Loader />;
-  }
-
+  const validId = typeof id === 'string' ? id : '';
+  const { data: currentUser } = useGetUserById(validId);
   const { user, setUser } = useUserContext();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { mutateAsync: updateUser } = useUpdateUser();
   const [isLoading, setIsLoading] = useState(false);
-
+  const formDefaultValues = {
+    file: [],
+    name: user.name,
+    username: user.username,
+    email: user.email,
+    bio: user.bio || '',
+  };
   const form = useForm<z.infer<typeof ProfileValidation>>({
     resolver: zodResolver(ProfileValidation),
-    defaultValues: {
-      file: [],
-      name: user.name,
-      username: user.username,
-      email: user.email,
-      bio: user.bio || '',
-    },
+    defaultValues: formDefaultValues,
   });
 
-  const onSubmit = async (value: z.infer<typeof ProfileValidation>) => {
+  async function onSubmit(value: z.infer<typeof ProfileValidation>) {
+    if (!currentUser) return;
     setIsLoading(true);
 
     const updatedUser = await updateUser({
@@ -82,7 +76,17 @@ const UpdateProfile = () => {
       imageUrl: updatedUser?.imageUrl,
     });
     return navigate(`/profile/${id}`);
-  };
+  }
+
+  useEffect(() => {
+    if (user && !isLoading) {
+      form.reset(formDefaultValues);
+    }
+  }, [user]);
+
+  if (!currentUser || !user || !form.getValues('name')) {
+    return <Loader />;
+  }
 
   return (
     <div className="flex flex-1">
