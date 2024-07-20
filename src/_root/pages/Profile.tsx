@@ -40,13 +40,12 @@ const Profile = () => {
 
   const isUserAccessingOwnProfile = currentUser.$id === user.id;
 
-  const noPostsMessage = () => {
-    return `${
+  const noPostsMessage = () =>
+    `${
       isUserAccessingOwnProfile
         ? "You haven't"
         : `${currentUser.name.split(' ')[0]} hasn't`
     } created any posts yet`;
-  };
 
   return (
     <div className="profile-container">
@@ -67,19 +66,19 @@ const Profile = () => {
               <p className="small-regular md:body-medium text-light-3 text-center xl:text-left">
                 @{currentUser.username}
               </p>
+
+              {currentUser.bio && (
+                <p className="small-medium md:base-medium text-center xl:text-left mt-3 max-w-screen-sm">
+                  {currentUser.bio}
+                </p>
+              )}
             </div>
 
-            <div className="flex gap-8 mt-5 items-center justify-center xl:justify-start flex-wrap z-20">
+            <div className="flex gap-8 mt-7 items-center justify-center xl:justify-start flex-wrap z-20">
               <StatBlock value={currentUser.posts.length} label="Posts" />
               <StatBlock value={20} label="Followers" />
               <StatBlock value={20} label="Following" />
             </div>
-
-            {currentUser.bio && (
-              <p className="small-medium md:base-medium text-center xl:text-left mt-7 max-w-screen-sm">
-                {currentUser.bio}
-              </p>
-            )}
           </div>
 
           <div className="flex justify-center gap-4">
